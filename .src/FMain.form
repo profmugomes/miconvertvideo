@@ -1,0 +1,131 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,84,81)
+  Font = Font["11"]
+  Text = ("MiConvertVideo")
+  Icon = Picture["miconvertimage.png"]
+  Resizable = False
+  { Menu1 Menu
+    Text = ("Sobre")
+    { mnuCheckUpdate Menu
+      Text = ("Verificar Atualização")
+    }
+    { Menu4 Menu
+    }
+    { mnuApoie Menu
+      Text = ("Apoie MiConvertVideo")
+    }
+    { Menu3 Menu
+    }
+    { mnuSobre Menu
+      Text = ("Sobre MiConvertVideo")
+    }
+  }
+  { Menu2 Menu
+    Text = ("Menu2")
+    Visible = False
+    { mnuCopiar Menu
+      Text = ("Copiar")
+    }
+  }
+  { btnConvert Button
+    MoveScaled(30,43,23,4)
+    Font = Font["12"]
+    Text = ("Converter")
+  }
+  { Label2 Label
+    MoveScaled(1,22,23,5)
+    Font = Font["Bold,12"]
+    Text = ("Converter para")
+  }
+  { cboConvertType ComboBox
+    MoveScaled(1,27,23,5)
+    #Translate = False
+    ReadOnly = True
+    List = ["MP4", "MKV"]
+    Text = "MP4"
+  }
+  { lblInfo Label
+    MoveScaled(1,50,81,3)
+    Font = Font["Bold,12"]
+  }
+  { Label1 Label
+    MoveScaled(25,22,23,5)
+    Font = Font["Bold,12"]
+    Text = ("Qualidade")
+  }
+  { Label3 Label
+    MoveScaled(49,32,12,5)
+    Font = Font["Bold,12"]
+    Text = ("Tamanho")
+  }
+  { txtWidth ValueBox
+    MoveScaled(49,36,10,5)
+    #Translate = False
+    Text = "1280"
+  }
+  { txtHeight ValueBox
+    MoveScaled(60,36,10,5)
+    #Translate = False
+    Text = "720"
+  }
+  { cboQuality ComboBox
+    MoveScaled(25,27,23,5)
+    ReadOnly = True
+    List = [("Muito Alta"), ("Alta"), ("Boa"), ("Média"), ("Baixa"), ("Muito Baixa")]
+  }
+  { cboSpeed ComboBox
+    MoveScaled(49,27,18,5)
+    ReadOnly = True
+    List = [("ultrafast"), ("superfast"), ("veryfast"), ("faster"), ("fast"), ("medium"), ("slow"), ("slower"), ("veryslow")]
+  }
+  { Label4 Label
+    MoveScaled(49,22,17,5)
+    Font = Font["Bold,12"]
+    Text = ("Velocidade")
+  }
+  { Label5 Label
+    MoveScaled(1,32,23,5)
+    Font = Font["Bold,12"]
+    Text = ("Codec de Vídeo")
+  }
+  { Label6 Label
+    MoveScaled(25,32,23,5)
+    Font = Font["Bold,12"]
+    Text = ("Codec de Áudio")
+  }
+  { cboCodecVideo ComboBox
+    MoveScaled(1,36,23,5)
+    ReadOnly = True
+    Sorted = True
+  }
+  { cboCodecAudio ComboBox
+    MoveScaled(25,36,23,5)
+    ReadOnly = True
+    Sorted = True
+  }
+  { btnAddFiles Button
+    MoveScaled(1,1,25,4)
+    Font = Font["12"]
+    Text = ("Adicionar Arquivos")
+  }
+  { btnRemoverTodosItens Button
+    MoveScaled(53,1,25,4)
+    Font = Font["12"]
+    Text = ("Remover Todos")
+  }
+  { btnRemoverItens Button
+    MoveScaled(27,1,25,4)
+    Font = Font["12"]
+    Text = ("Remover")
+  }
+  { lstArquivos ListView
+    MoveScaled(1,6,82,16)
+    Mode = Select.Multiple
+    ShowCheck = True
+  }
+  { txtResultado TextArea
+    MoveScaled(1,54,82,23)
+  }
+}

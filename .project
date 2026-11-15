@@ -6,6 +6,7 @@ Component=gb.image
 Component=gb.settings
 Component=gb.gtk3
 Component=gb.form
+Component=gb.form.dialog
 Description="Converta vídeos em diferentes formatos."
 Authors="Murilo Gomes <profmugomes@gmail.com>"
 TabSize=2

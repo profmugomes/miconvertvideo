@@ -1,0 +1,236 @@
+' Gambas class file
+
+' Copyright (C) 2026 Murilo Gomes <profmugomes.com.br>
+' SPDX-License-Identifier: GPL-2.0-only
+
+' Site: https://www.profmugomes.com.br
+
+Public Sub mnuApoie_Click()
+  
+  Shell "xdg-open \"https://github.com/sponsors/profmugomes\""
+  
+End
+
+Public Sub mnuSobre_Click()
+  
+  FAbout.Show()
+  
+End
+
+Public Sub txtArquivo_Click()
+  
+  Dialog.Title = ("Select File")
+  
+End
+
+Public Sub btnRemoverItens_Click()
+  
+  If lstArquivos.Selection.Count > 0 Then 
+    For Each row As String In lstArquivos.Selection 
+      lstArquivos.Remove(row)
+    Next
+  Endif 
+  
+End
+
+Public Sub btnAddFiles_Click()
+  
+  Dialog.Title = ("Select File")
+  Dialog.Filter = ["*.mp4;*.mkv;", "Arquivo de Video"]
+  If Dialog.OpenFile(True) Then 
+    Return
+  Endif
+  
+  For Each row As String In Dialog.Paths 
+    Try lstArquivos.Add(row, row)
+  Next
+  
+End
+
+Public Sub Form_Open()
+  
+  Dim sCodecs As String
+  
+  If Exist("/usr/bin/ffmpeg") = False Then 
+    Message.Error(("<b>ffmpeg</b> not found!"))
+    Quit
+  Endif
+  
+  cboConvertType.Text = Settings["tipo", "MP4"]
+  cboQuality.Index = Settings["qualidade", 2]
+  cboSpeed.Text = Settings["velocidade", "medium"]
+  
+  Shell "ffmpeg -hide_banner -encoders | awk '$1 ~ /^V/ {print $2}'" Wait To sCodecs
+  
+  For Each row As String In Split(sCodecs, gb.NewLine)
+    If row <> "=" And row <> "" Then 
+      cboCodecVideo.Add(Trim(row))
+    Endif
+  Next
+  
+  Shell "ffmpeg -hide_banner -encoders | awk '$1 ~ /^A/ {print $2}'" Wait To sCodecs
+  
+  For Each row As String In Split(sCodecs, gb.NewLine)
+    If row <> "=" And row <> "" Then 
+      cboCodecAudio.Add(Trim(row))
+    Endif
+  Next
+  
+  cboCodecVideo.Text = Settings["codecvideo", "libx264"]
+  cboCodecAudio.Text = Settings["codecaudio", "aac"]
+  
+End
+
+Private Function getQualidade() As Integer
+  
+  Select Case cboQuality.Index
+    Case 0
+      Return 18 ' Muito Alta
+    Case 1
+      Return 20 ' Alta
+    Case 3
+      Return 26 ' Média
+    Case 4
+      Return 28 ' Baixa
+    Case 5
+      Return 32 ' Muito Baixa
+    Case Else 
+      Return 23 ' Boa
+  End Select
+  
+  ' Case Like "abc*" pode usar expressão regular
+  ' Case 2, 3 um ou outro
+  ' Case 1 To 3 está entre  
+End
+
+Public Function GerarComando(sEntrada As String, sSaida As String) As String
+  
+  Dim sComando As String
+  Dim sVideo As String
+  Dim sAudio As String
+  
+  sVideo = cboCodecVideo.Text
+  sAudio = cboCodecAudio.Text
+  
+  sComando = "ffmpeg -y -i " & Shell$(sEntrada)
+  
+  ' Resolução
+  If txtWidth.Value > 0 And txtHeight.Value > 0 Then
+    sComando &= " -vf scale=" & txtWidth.Value & ":" & txtHeight.Value
+  Endif
+  
+  ' Codec de vídeo
+  If sVideo = "copy" Then
+    sComando &= " -c:v copy"
+  Else If sVideo <> "auto" And sVideo <> "" Then
+    
+    sComando &= " -c:v " & Shell$(sVideo)
+    
+    ' CRF
+    Select Case sVideo
+      Case "libx264", "libx265", "libvpx-vp9", "libaom-av1", "librav1e", "libsvtav1"
+        sComando &= " -crf " & getQualidade()
+    End Select
+    
+    ' Preset
+    Select Case sVideo
+      Case "libx264", "libx265", "libsvtav1"
+        If cboSpeed.Text <> "" Then
+          sComando &= " -preset " & Shell$(cboSpeed.Text)
+        Endif
+    End Select
+    
+  Endif
+  
+  ' Codec de áudio
+  If sAudio = "copy" Then
+    sComando &= " -c:a copy"
+  Else If sAudio <> "auto" And sAudio <> "" Then
+    
+    sComando &= " -c:a " & Shell$(sAudio)
+    
+    ' Bitrate de áudio
+    sComando &= " -b:a 128k"
+    
+  Endif
+  
+  sComando &= " " & Shell$(sSaida)
+  
+  Return sComando
+  
+End
+
+Public Sub Process_Read()
+  
+  Dim sLine As String
+  
+  sLine = Read #Last, -256
+  
+  txtResultado.Text &= sLine
+
+End
+
+Public Sub Process_Kill()
+  
+  txtResultado.Text &= gb.NewLine & "----------------------------------" & gb.NewLine
+
+End
+
+Public Sub btnConvert_Click()
+  
+  Dim i As Integer = 0
+  Dim sPath As String = ""
+  Dim sInfo As String = ""
+  Dim sSize As String = ""
+  
+  btnConvert.Enabled = False
+  txtResultado.Clear()
+  lblInfo.Text = ""
+  
+  If lstArquivos.Count > 0 Then 
+    For Each row As String In lstArquivos.Keys
+      lblInfo.Text = Subst(("Converting &1..."), File.Name(row))
+      Wait 1
+      If txtWidth.Value = 0 Or txtHeight.Value = 0 Then
+        txtWidth.Value = 1280
+        txtHeight.Value = 720
+      Endif
+      
+      If cboConvertType.Text = "Base64" Then         
+        ' Shell "convert \"" & row & "\"" & sSize & " -quality " & txtQualidade.Value & " inline: > \"" & row & ".txt\"" Wait
+      Else 
+        sPath = File.Dir(row) & "/" & File.BaseName(row) & "." & Lower(cboConvertType.Text)
+        
+        Shell GerarComando(row, sPath) & " 2>&1" Wait For Read Write As "Process"
+      Endif
+      
+      Inc i
+    Next
+    
+    lblInfo.Text = ("Completed!")
+  Endif 
+  
+  Settings["tipo"] = cboConvertType.Text
+  Settings.Save()
+  
+  btnConvert.Enabled = True
+  
+End
+
+Public Sub btnRemoverTodosItens_Click()
+  
+  lstArquivos.Clear()
+  
+End
+
+Public Sub URLLabel1_Click()
+  
+  mnuApoie_Click
+  
+End
+
+Public Sub mnuCheckUpdate_Click()
+  
+  Shell "xdg-open \"https://github.com/profmugomes/miconvertvideo/releases\""
+  
+End
