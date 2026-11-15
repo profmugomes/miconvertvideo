@@ -1,7 +1,7 @@
 # MiConvertVideo
 
 > [!Note]
-> Software em desenvolvimento inicial
+> Software em desenvolvimento e testes
 
 Converta vídeos em diferentes formatos.
 
