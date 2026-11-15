@@ -1,0 +1,15 @@
+# Gambas Project File 3.0
+Title=MiConvertVideo
+Startup=FMain
+Version=0.0.1
+Component=gb.image
+Component=gb.settings
+Component=gb.gtk3
+Component=gb.form
+Description="Converta vídeos em diferentes formatos."
+Authors="Murilo Gomes <profmugomes@gmail.com>"
+TabSize=2
+Language=pt_BR
+ForceBytecodeVersion=3.15
+Vendor=profmugomes
+Packager=1
