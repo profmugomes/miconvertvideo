@@ -196,13 +196,8 @@ Public Sub btnConvert_Click()
         txtHeight.Value = 720
       Endif
       
-      If cboConvertType.Text = "Base64" Then         
-        ' Shell "convert \"" & row & "\"" & sSize & " -quality " & txtQualidade.Value & " inline: > \"" & row & ".txt\"" Wait
-      Else 
-        sPath = File.Dir(row) & "/" & File.BaseName(row) & "." & Lower(cboConvertType.Text)
-        
-        Shell GerarComando(row, sPath) & " 2>&1" Wait For Read Write As "Process"
-      Endif
+      sPath = File.Dir(row) & "/" & File.BaseName(row) & "." & Lower(cboConvertType.Text)
+      Shell GerarComando(row, sPath) & " 2>&1" Wait For Read Write As "Process"
       
       Inc i
     Next
@@ -211,6 +206,10 @@ Public Sub btnConvert_Click()
   Endif 
   
   Settings["tipo"] = cboConvertType.Text
+  Settings["codecaudio"] = cboCodecAudio.Text
+  Settings["codecvideo"] = cboCodecVideo.Text
+  Settings["qualidade"] = cboQuality.Text
+  Settings["velocidade"] = cboSpeed.Text
   Settings.Save()
   
   btnConvert.Enabled = True
