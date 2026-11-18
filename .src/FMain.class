@@ -180,8 +180,6 @@ Public Sub btnConvert_Click()
   
   Dim i As Integer = 0
   Dim sPath As String = ""
-  Dim sInfo As String = ""
-  Dim sSize As String = ""
   
   btnConvert.Enabled = False
   txtResultado.Clear()
