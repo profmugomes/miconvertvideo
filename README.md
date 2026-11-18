@@ -1,13 +1,10 @@
 # MiConvertVideo
 
-> [!Note]
-> Software em desenvolvimento e testes
-
 Converta vídeos em diferentes formatos.
 
 ## Informações
 
- - [Repository MiConvertVideo](https://github.com/profmugomes/miconvertvideo)
+ - [Repositório MiConvertVideo](https://github.com/profmugomes/miconvertvideo)
 
 ## Requerimento do Sistema
 
