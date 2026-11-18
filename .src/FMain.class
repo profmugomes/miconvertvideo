@@ -208,7 +208,7 @@ Public Sub btnConvert_Click()
   Settings["tipo"] = cboConvertType.Text
   Settings["codecaudio"] = cboCodecAudio.Text
   Settings["codecvideo"] = cboCodecVideo.Text
-  Settings["qualidade"] = cboQuality.Text
+  Settings["qualidade"] = cboQuality.Index
   Settings["velocidade"] = cboSpeed.Text
   Settings.Save()
   
