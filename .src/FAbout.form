@@ -4,7 +4,7 @@
   MoveScaled(0,0,73,58)
   Font = Font["12"]
   Text = ("About MiConvertVideo")
-  Icon = Picture["miconvertimage.png"]
+  Icon = Picture["miconvertvideo.png"]
   Resizable = False
   { Label2 Label
     MoveScaled(1,1,66,4)
@@ -57,6 +57,7 @@
   { PictureBox1 PictureBox
     MoveScaled(57,3,11,11)
     #Translate = False
+    Picture = Picture.Load("miconvertvideo.png")
     Stretch = True
   }
   { lblVersion Label
